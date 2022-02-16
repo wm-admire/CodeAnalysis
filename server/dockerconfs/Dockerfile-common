@@ -3,6 +3,10 @@ FROM python:3.7.12-slim
 ARG EXTRA_TOOLS="gnupg curl wget jq vim-tiny net-tools procps python3-dev default-libmysqlclient-dev locales inotify-tools gcc subversion git telnet iputils-ping vim openssh-client"
 
 RUN set -ex && cd / \
+    && cat /etc/apt/sources.list\
+    && mv /etc/apt/sources.list /etc/apt/sources.list.backup\
+    && echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free\ndeb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free\ndeb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free\ndeb https://mirrors.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free\n" > /etc/apt/sources.list\
+    && cat /etc/apt/sources.list\
     && apt-get update \
     && apt-get install -y --no-install-recommends $EXTRA_TOOLS \
     && apt-get update \
