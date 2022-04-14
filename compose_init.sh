@@ -13,7 +13,7 @@ function init_db() {
 
    docker-compose exec mysql /bin/bash -c \
         "printf 'wait db [DB default password: TCA!@#2021]\n'; \
-         until \$(mysql -u${CODEDOG_DBUSER} -p'' -e '\s' > /dev/null 2>&1); do \
+         until \$(MYSQL_PWD=${CODEDOG_DBPASSWD} mysql -u${CODEDOG_DBUSER} -e '\s' > /dev/null 2>&1); do \
             printf '.' && sleep 1; \
          done; echo
         "
@@ -67,7 +67,7 @@ function start_all_services() {
     docker-compose up -d
 }
 
-
+sh $CURRENT_PATH/server/scripts/deploy_test_docker.sh
 start_db
 init_db
 init_file
@@ -75,3 +75,4 @@ init_login
 init_analysis
 init_main
 start_all_services
+sh $CURRENT_PATH/server/scripts/service_test_docker.sh
